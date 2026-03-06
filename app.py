@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # -------------------------------
-# PAGE CONFIG
+# PAGE CONFIGURATION
 # -------------------------------
 
 st.set_page_config(
@@ -20,14 +20,26 @@ st.write("Upload a dataset to automatically perform exploratory data analysis an
 # SIDEBAR
 # -------------------------------
 
-st.sidebar.header("Upload Dataset")
-uploaded_file = st.sidebar.file_uploader("Upload CSV file", type=["csv"])
+st.sidebar.header("Dataset Controls")
+
+uploaded_file = st.sidebar.file_uploader(
+    "Upload CSV Dataset",
+    type=["csv"]
+)
+
+# Replace dataset button
+if st.sidebar.button("Replace Dataset", key="replace_dataset_button"):
+    st.rerun()
+
+st.sidebar.info("Upload a CSV dataset. You can replace it anytime.")
 
 # -------------------------------
 # LOAD DATA
 # -------------------------------
 
 if uploaded_file:
+
+    st.success("Dataset uploaded successfully.")
 
     df = pd.read_csv(uploaded_file)
 
@@ -57,14 +69,11 @@ if uploaded_file:
 
     st.header("Data Quality Report")
 
-    missing_values = df.isnull().sum().sum()
-    duplicate_rows = df.duplicated().sum()
-
-    st.write("Total Missing Values:", missing_values)
-    st.write("Duplicate Rows:", duplicate_rows)
+    st.write("Total Missing Values:", df.isnull().sum().sum())
+    st.write("Duplicate Rows:", df.duplicated().sum())
 
 # -------------------------------
-# MISSING VALUE ANALYSIS
+# MISSING VALUE SUMMARY
 # -------------------------------
 
     st.header("Missing Value Summary")
@@ -102,9 +111,9 @@ if uploaded_file:
 # SUMMARY STATISTICS
 # -------------------------------
 
-    st.header("Summary Statistics")
-
     if len(numeric_cols) > 0:
+
+        st.header("Summary Statistics")
         st.dataframe(df[numeric_cols].describe())
 
 # -------------------------------
@@ -115,7 +124,11 @@ if uploaded_file:
 
         st.header("Histogram Visualization")
 
-        selected_col = st.selectbox("Select numeric column", numeric_cols)
+        selected_col = st.selectbox(
+            "Select numeric column",
+            numeric_cols,
+            key="hist_column"
+        )
 
         fig, ax = plt.subplots()
         sns.histplot(df[selected_col].dropna(), kde=True)
@@ -129,6 +142,7 @@ if uploaded_file:
     if len(numeric_cols) > 0:
 
         st.header("Automatic Chart Generator")
+        sample_df = df.sample(min(len(df), 90000))
 
         for col in numeric_cols:
 
@@ -139,6 +153,8 @@ if uploaded_file:
             sns.histplot(df[col].dropna(), kde=True)
 
             st.pyplot(fig)
+        
+            plt.close(fig)
 
 # -------------------------------
 # CORRELATION HEATMAP
@@ -150,11 +166,11 @@ if uploaded_file:
 
         corr = df[numeric_cols].corr()
 
-        fig2, ax2 = plt.subplots()
+        fig, ax = plt.subplots()
 
         sns.heatmap(corr, annot=True, cmap="coolwarm")
 
-        st.pyplot(fig2)
+        st.pyplot(fig)
 
 # -------------------------------
 # STRONG CORRELATION INSIGHTS
@@ -181,7 +197,11 @@ if uploaded_file:
 
         st.header("Categorical Value Analysis")
 
-        selected_cat = st.selectbox("Select categorical column", categorical_cols)
+        selected_cat = st.selectbox(
+            "Select categorical column",
+            categorical_cols,
+            key="cat_column"
+        )
 
         st.dataframe(df[selected_cat].value_counts().head(10))
 
@@ -193,7 +213,11 @@ if uploaded_file:
 
         st.header("Outlier Detection (IQR Method)")
 
-        selected_outlier_col = st.selectbox("Select column for outlier detection", numeric_cols)
+        selected_outlier_col = st.selectbox(
+            "Select column for outlier detection",
+            numeric_cols,
+            key="outlier_column"
+        )
 
         Q1 = df[selected_outlier_col].quantile(0.25)
         Q3 = df[selected_outlier_col].quantile(0.75)
@@ -227,7 +251,7 @@ if uploaded_file:
     st.dataframe(clean_df.head())
 
 # -------------------------------
-# DOWNLOAD CLEAN DATA
+# DOWNLOAD CLEANED DATASET
 # -------------------------------
 
     csv = clean_df.to_csv(index=False).encode("utf-8")
@@ -240,7 +264,7 @@ if uploaded_file:
     )
 
 # -------------------------------
-# DOWNLOAD ANALYSIS REPORT
+# DOWNLOAD DATASET REPORT
 # -------------------------------
 
     st.header("Download Dataset Report")
