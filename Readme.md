@@ -29,7 +29,7 @@ Seaborn
 
 1. Clone the repository
 
-git clone https://github.com/yourusername/AI-Data-Analyst-Assistant
+git clone https://github.com/GeethaThimmaraju/AI-Data-Analyst-Assistant
 
 2. Install dependencies
 
