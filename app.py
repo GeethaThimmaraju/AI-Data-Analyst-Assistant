@@ -3,9 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# -------------------------------
 # PAGE CONFIGURATION
-# -------------------------------
 
 st.set_page_config(
     page_title="AI Data Analyst Assistant",
@@ -16,9 +14,7 @@ st.set_page_config(
 st.title("📊 AI Data Analyst Assistant")
 st.write("Upload a dataset to automatically perform exploratory data analysis and generate insights.")
 
-# -------------------------------
 # SIDEBAR
-# -------------------------------
 
 st.sidebar.header("Dataset Controls")
 
@@ -33,9 +29,7 @@ if st.sidebar.button("Replace Dataset", key="replace_dataset_button"):
 
 st.sidebar.info("Upload a CSV dataset. You can replace it anytime.")
 
-# -------------------------------
 # LOAD DATA
-# -------------------------------
 
 if uploaded_file:
 
@@ -43,16 +37,13 @@ if uploaded_file:
 
     df = pd.read_csv(uploaded_file)
 
-# -------------------------------
 # DATASET PREVIEW
-# -------------------------------
 
     st.header("Dataset Preview")
     st.dataframe(df.head())
 
-# -------------------------------
+
 # KPI DASHBOARD
-# -------------------------------
 
     st.header("Dataset Dashboard")
 
@@ -63,18 +54,15 @@ if uploaded_file:
     col3.metric("Missing Values", df.isnull().sum().sum())
     col4.metric("Duplicate Rows", df.duplicated().sum())
 
-# -------------------------------
 # DATA QUALITY REPORT
-# -------------------------------
 
     st.header("Data Quality Report")
 
     st.write("Total Missing Values:", df.isnull().sum().sum())
     st.write("Duplicate Rows:", df.duplicated().sum())
 
-# -------------------------------
+
 # MISSING VALUE SUMMARY
-# -------------------------------
 
     st.header("Missing Value Summary")
 
@@ -88,9 +76,7 @@ if uploaded_file:
 
     st.dataframe(missing_df[missing_df["Missing Values"] > 0])
 
-# -------------------------------
 # COLUMN TYPE DETECTION
-# -------------------------------
 
     st.header("Column Type Detection")
 
@@ -107,18 +93,14 @@ if uploaded_file:
         st.write("Categorical Columns")
         st.write(list(categorical_cols))
 
-# -------------------------------
 # SUMMARY STATISTICS
-# -------------------------------
 
     if len(numeric_cols) > 0:
 
         st.header("Summary Statistics")
         st.dataframe(df[numeric_cols].describe())
 
-# -------------------------------
 # HISTOGRAM VISUALIZATION
-# -------------------------------
 
     if len(numeric_cols) > 0:
 
@@ -135,9 +117,7 @@ if uploaded_file:
 
         st.pyplot(fig)
 
-# -------------------------------
 # AUTOMATIC CHART GENERATOR
-# -------------------------------
 
     if len(numeric_cols) > 0:
 
@@ -156,9 +136,7 @@ if uploaded_file:
         
             plt.close(fig)
 
-# -------------------------------
 # CORRELATION HEATMAP
-# -------------------------------
 
     if len(numeric_cols) > 1:
 
@@ -172,9 +150,7 @@ if uploaded_file:
 
         st.pyplot(fig)
 
-# -------------------------------
 # STRONG CORRELATION INSIGHTS
-# -------------------------------
 
     if len(numeric_cols) > 1:
 
@@ -189,9 +165,7 @@ if uploaded_file:
 
                     st.write(f"{row} ↔ {col} : {corr_matrix.loc[row, col]:.2f}")
 
-# -------------------------------
 # CATEGORICAL ANALYSIS
-# -------------------------------
 
     if len(categorical_cols) > 0:
 
@@ -205,9 +179,7 @@ if uploaded_file:
 
         st.dataframe(df[selected_cat].value_counts().head(10))
 
-# -------------------------------
 # OUTLIER DETECTION
-# -------------------------------
 
     if len(numeric_cols) > 0:
 
@@ -231,9 +203,8 @@ if uploaded_file:
 
         st.write("Number of Outliers:", len(outliers))
 
-# -------------------------------
 # DATA CLEANING
-# -------------------------------
+
 
     st.header("Clean Dataset")
 
@@ -250,9 +221,7 @@ if uploaded_file:
     st.write("Preview of Cleaned Dataset")
     st.dataframe(clean_df.head())
 
-# -------------------------------
 # DOWNLOAD CLEANED DATASET
-# -------------------------------
 
     csv = clean_df.to_csv(index=False).encode("utf-8")
 
@@ -263,9 +232,7 @@ if uploaded_file:
         mime="text/csv"
     )
 
-# -------------------------------
 # DOWNLOAD DATASET REPORT
-# -------------------------------
 
     st.header("Download Dataset Report")
 
