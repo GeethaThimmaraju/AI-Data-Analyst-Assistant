@@ -38,6 +38,11 @@ pip install -r requirements.txt
 3. Run the app
 
 streamlit run app.py
+## Live Demo
+
+Try the AI Data Analyst Assistant here:
+
+https://ai-data-analyst-assistant-4fcows6ugkd7zeovkva2t4.streamlit.app/
 
 ## Use Case
 
